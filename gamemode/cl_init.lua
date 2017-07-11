@@ -7,9 +7,14 @@ include("Util/sh_groups.lua");
 include("PlayerSettings/sh_playerSettingsEnums.lua")
 
 include("DisplayElements/cl_fonts.lua")
+include("DisplayElements/vgui/DMizmoFrame.lua")
+include("DisplayElements/vgui/DMizmoMainMenu.lua")
+
 include("DisplayElements/cl_hud.lua")
 include("DisplayElements/cl_voicehud.lua")
 include("DisplayElements/cl_scoreboard.lua")
+include("DisplayElements/cl_betapopup.lua");
+include("DisplayElements/cl_escMenu.lua");
 
 include("ButtonClaiming/cl_showButtonClaimed.lua");
 
@@ -39,8 +44,6 @@ include("Autojump/sh_autojump.lua");
 include("NotificationSystem/cl_notificationSystemAlert.lua");
 include("NotificationSystem/cl_notificationSystemMenu.lua");
 
-include("DisplayElements/cl_betapopup.lua");
-
 include("Knives/add_tfa_skins.lua");
 include("Knives/csgo_knife_snd_init.lua");
 
@@ -52,6 +55,7 @@ include("DropWeapon/cl_dropweapon.lua");
 
 include("Mapvote/mapvote.lua");
 include("Mapvote/cl_mapvote.lua");
+
 
 PS:Initialize();
 

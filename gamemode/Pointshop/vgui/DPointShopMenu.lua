@@ -15,7 +15,7 @@ function PANEL:Init()
 			{ x = 15, y = h - 15 },
 			{ x = 15, y = h }
 		}
-		surface.SetDrawColor(Colours.Gold);
+		surface.SetDrawColor(Colours.GoldDark);
 		surface.DrawPoly(leftArrow);
 
 		local rightArrow =
@@ -24,7 +24,7 @@ function PANEL:Init()
 			{ x = w - 15, y = h - 15 },
 			{ x = w - 15, y = h }
 		}
-		surface.SetDrawColor(Colours.Gold);
+		surface.SetDrawColor(Colours.GoldDark);
 		surface.DrawPoly(rightArrow);
 	end
 

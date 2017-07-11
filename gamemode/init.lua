@@ -11,9 +11,14 @@ AddCSLuaFile("Util/sh_groups.lua");
 AddCSLuaFile("PlayerSettings/sh_playerSettingsEnums.lua")
 
 AddCSLuaFile("DisplayElements/cl_fonts.lua")
+AddCSLuaFile("DisplayElements/vgui/DMizmoFrame.lua")
+AddCSLuaFile("DisplayElements/vgui/DMizmoMainMenu.lua")
+
 AddCSLuaFile("DisplayElements/cl_hud.lua")
 AddCSLuaFile("DisplayElements/cl_voicehud.lua")
 AddCSLuaFile("DisplayElements/cl_scoreboard.lua")
+AddCSLuaFile("DisplayElements/cl_betapopup.lua");
+AddCSLuaFile("DisplayElements/cl_escMenu.lua");
 
 AddCSLuaFile("ButtonClaiming/cl_showButtonClaimed.lua");
 
@@ -43,8 +48,6 @@ AddCSLuaFile("Autojump/sh_autojump.lua");
 
 AddCSLuaFile("NotificationSystem/cl_notificationSystemAlert.lua");
 AddCSLuaFile("NotificationSystem/cl_notificationSystemMenu.lua");
-
-AddCSLuaFile("DisplayElements/cl_betapopup.lua");
 
 AddCSLuaFile("Knives/add_tfa_skins.lua");
 AddCSLuaFile("Knives/csgo_knife_snd_init.lua");

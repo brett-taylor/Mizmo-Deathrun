@@ -159,9 +159,8 @@ ROUND:AddState( ROUND_PREP,
 			-- get a list of players, ordered by how many death rounds they have had, lowest to highest
 			local orderedlist = {}
 			local unorderedlist = table.Copy(player.GetAllPlaying())
-
+		
 			for i = 1, #unorderedlist do
-
 				local lowest = 9999999
 				local lowestply = nil
 				local lowestidx = 0
@@ -176,7 +175,6 @@ ROUND:AddState( ROUND_PREP,
 
 				table.remove(unorderedlist, lowestidx)
 				table.insert(orderedlist, lowestply)
-
 			end
 
 			print("\nList of Death counters:")
@@ -190,8 +188,7 @@ ROUND:AddState( ROUND_PREP,
 			-- remove players from orderedpool and pool if they have been death 2 rounds in a row
 			for k, ply in ipairs(player.GetAllPlaying()) do
 				local streak = DeathTeamStreaks[ ply ] or 0
-				if streak > 0 then
-					print(ply:Nick().." has a streak greater than 0, removing from pool(s).")
+				if (streak > 0) then
 					table.RemoveByValue(orderedpool, ply)
 					table.RemoveByValue(pool, ply)
 				end
@@ -204,7 +201,6 @@ ROUND:AddState( ROUND_PREP,
 
 				if #punishmentpool > 0 then
 					local ply = punishmentpool[#punishmentpool]
-					
 					DR:PardonDeathAvoid( ply, 1 )
 
 					DR:ChatBroadcast( "Player "..ply:Nick().." is being punished for death avoidance! They have "..tostring(DR:GetDeathAvoid( ply )).." Death rounds remaining." )
