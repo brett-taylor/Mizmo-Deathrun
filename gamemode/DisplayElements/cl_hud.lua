@@ -135,6 +135,14 @@ function HUD.DrawHUD()
     HUD.DrawBasicElements();
     HUD.DrawHUDText();
     HUD.DrawElements();
+    HUD.CreateTimer();
+    if (HUD.RoundState == 1 or HUD.RoundState == 2) then
+    	HUD.LerpTimer()
+    end
+
+    if isdead == 1 then
+    HUD.DrawDeathFeed();
+	end
 
     -- TEMP
     if (LocalPlayer():GetNWString(PlayerSettings.Enums.IS_DEBUGGING.Name) == "1") then
@@ -193,6 +201,81 @@ function HUD.TempDrawRoundstatus()
     draw.SimpleTextOutlined("Hours Played: "..LocalPlayer():GetPlaytimeHours(), "MizmoGaming-Intro-Subhead", ScrW() / 2 + 2, 70, Colours.Gold, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Colours.Grey)
 end
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////RoundTimer////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+HUD.RoundState = 0;
+HUD.TimerY = -36;
+
+function HUD.LerpTimer()
+	if HUD.RoundState == 1 then
+		HUD.TimerY = Lerp(FrameTime() * 5, HUD.TimerY, 0)
+	else
+		HUD.TimerY = Lerp(FrameTime() * 5, HUD.TimerY, -36)
+	end
+end
+
+function HUD.CreateTimer()
+	draw.RoundedBox(8, ScrW()/2 - 120/2, HUD.TimerY, 120, 36, Color(Colours.Grey.r, Colours.Grey.g, Colours.Grey.b, 200))
+	draw.SimpleTextOutlined(string.ToMinutesSeconds(math.Clamp(ROUND:GetTimer(), 0, 99999)), "TimerFont", ScrW()/2 + 18, 36/2 + HUD.TimerY, Colours.Gold, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+
+	local clock = Material("mizmo-gaming-downloads/icons/clock32.png")
+
+	surface.SetMaterial(clock)
+	surface.SetDrawColor(Colours.Gold)
+	surface.DrawTexturedRect((ScrW()/2 - 120/2) + 5, 2 + HUD.TimerY, 32, 32)
+end
+
+function HUD.TimerIn()
+	HUD.TimerY = -36
+	HUD.RoundState = 1;
+end
+
+function HUD.TimerOut()
+	HUD.TimerY = 0
+	HUD.RoundState = 2;
+	DeathFeed(LocalPlayer())
+end
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////DeathFeed////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+HUD.VictimTable = {}
+HUD.VictimName = nil;
+isdead = 0;
+HUD.DeathAlpha = 0;
+HUD.DeathY = 0;
+
+function HUD.DrawDeathFeed()
+		draw.SimpleTextOutlined(HUD.VictimName, "TimerFont", ScrW()/2, (ScrH()/6) * 5 - HUD.DeathY, Color(200, 0, 0, HUD.DeathAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, HUD.DeathAlpha))
+		local skull = Material("mizmo-gaming-downloads/icons/skull32.png")
+		surface.SetMaterial(skull)
+		surface.SetDrawColor(Color(200, 0, 0, HUD.DeathAlpha))
+		local w, h = surface.GetTextSize(HUD.VictimName)
+		surface.DrawTexturedRect((ScrW()/2 - w/2) - 40, ((ScrH()/6) * 5 - h/2) - HUD.DeathY, 32, 32)
+
+		HUD.DeathY = HUD.DeathY + (1/2)
+		if HUD.DeathY >= 50 then
+			HUD.DeathAlpha = math.Clamp(HUD.DeathAlpha - (1/2), 0, 255)
+		end
+		if HUD.DeathAlpha <= 0 then
+			HUD.DeathAlpha = 0;
+			HUD.DeathY = 0;
+			isdead = 0;
+		end
+end
+
+function DeathFeed(victim)
+	HUD.VictimName = victim:GetName()
+	HUD.DeathAlpha = 255;
+	HUD.DeathY = 0;
+	isdead = 1;
+end
+
+hook.Add("DeathrunBeginPrep", "TimerIn", HUD.TimerIn)
+hook.Add("DeathrunBeginOver", "TimerOut", HUD.TimerOut)
 hook.Add("HUDPaint", "MizmoDrawHUD", HUD.DrawHUD); //Draws the HUD every frame
 hook.Add("Think", "TakeDamage", HUD.TakeDamageAnim); //Lerps the health colour if player takes damage
 hook.Add("HUDShouldDraw", "RemoveGarrysmodDefaultHud", HUD.RemoveGarrysmodDefaultHud);

@@ -45,6 +45,13 @@ surface.CreateFont("NameFont", {
 	antialias = true,
 });
 
+surface.CreateFont("TimerFont", {
+	font = "Roboto Regular",
+	size = 28,
+	weight = 500,
+	antialias = true,
+});
+
 surface.CreateFont("HealthFont", {
 	font = "Roboto Medium",
 	size = 48,
