@@ -115,3 +115,10 @@ surface.CreateFont("MizmoGaming-Traffic-Light-Text", {
 	size = 50,
 	weight = 70;
 });
+
+-- Used as buttons in pointshop
+surface.CreateFont("MizmoGaming-Pointshop-Title", {
+	font = "Roboto Light",
+	size = 30,
+	weight = 10;
+});
