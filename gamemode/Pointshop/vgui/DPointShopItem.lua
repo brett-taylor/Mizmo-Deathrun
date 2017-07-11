@@ -137,6 +137,14 @@ function PANEL:SetData(data)
 	end
 end
 
+function PANEL:Paint(w, h)
+	surface.SetDrawColor(Colours.Gold);
+	surface.DrawRect(0, 0, w, h);
+
+	surface.SetDrawColor(Colours.Grey);
+	surface.DrawRect(2, 2, w - 4, h - 4);
+end
+
 function PANEL:PaintOver()
 	if self.Data.AdminOnly then
 		surface.SetMaterial(adminicon)
@@ -168,7 +176,7 @@ function PANEL:PaintOver()
 		self.BarColor = ownedcolor
 	end
 	
-	surface.SetDrawColor(self.BarColor)
+	surface.SetDrawColor(Colours.Gold)
 	surface.DrawRect(0, self:GetTall() - self.InfoHeight, self:GetWide(), self.InfoHeight)
 	
 	draw.SimpleText(self.Info, "DefaultSmall", self:GetWide() / 2, self:GetTall() - (self.InfoHeight / 2), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

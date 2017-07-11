@@ -11,6 +11,7 @@ include "vgui/DPointShopItem.lua"
 include "vgui/DPointShopPreview.lua"
 include "vgui/DPointShopColorChooser.lua"
 include "vgui/DPointShopGivePoints.lua"
+include "vgui/DPointShopTab.lua"
 
 PS.ShopMenu = nil
 PS.ClientsideModels = {}
@@ -29,7 +30,10 @@ function PS:ToggleMenu()
 	end
 	
 	if PS.ShopMenu:IsVisible() then
-		PS.ShopMenu:Hide()
+		PS.ShopMenu:Remove();
+		PS.ShopMenu = nil;
+
+		//PS.ShopMenu:Hide()
 		gui.EnableScreenClicker(false)
 	else
 		PS.ShopMenu:Show()
