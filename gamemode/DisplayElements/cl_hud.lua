@@ -266,9 +266,9 @@ function HUD.DrawDeathFeed()
         local w, h = surface.GetTextSize(HUD.VictimTable[HUD.VictimI])
         surface.DrawTexturedRect((ScrW()/2 - w/2) - 40, ((ScrH()/14) * 13 - h/2) - HUD.DeathY, 32, 32)
 
-        HUD.DeathY = HUD.DeathY + (1/2)
-        if HUD.DeathY >= 50 then
-            HUD.DeathAlpha = math.Clamp(HUD.DeathAlpha - (1/2), 0, 255)
+        HUD.DeathY = HUD.DeathY + (((3/4)*FrameTime()) * 100)
+        if HUD.DeathY >= 10 then
+            HUD.DeathAlpha = math.Clamp(HUD.DeathAlpha - (((3/4)*FrameTime()) * 255), 0, 255)
         end
         if HUD.DeathAlpha <= 0 then
             HUD.DeathAlpha = 0;
