@@ -140,9 +140,7 @@ function HUD.DrawHUD()
     	HUD.LerpTimer()
     end
 
-    if isdead == 1 then
     HUD.DrawDeathFeed();
-	end
 
     -- TEMP
     if (LocalPlayer():GetNWString(PlayerSettings.Enums.IS_DEBUGGING.Name) == "1") then
@@ -217,7 +215,7 @@ function HUD.LerpTimer()
 end
 
 function HUD.CreateTimer()
-	draw.RoundedBox(8, ScrW()/2 - 120/2, HUD.TimerY, 120, 36, Color(Colours.Grey.r, Colours.Grey.g, Colours.Grey.b, 200))
+	draw.RoundedBox(8, ScrW()/2 - 120/2, HUD.TimerY - 20, 120, 56, Color(Colours.Grey.r, Colours.Grey.g, Colours.Grey.b, 200))
 	draw.SimpleTextOutlined(string.ToMinutesSeconds(math.Clamp(ROUND:GetTimer(), 0, 99999)), "TimerFont", ScrW()/2 + 18, 36/2 + HUD.TimerY, Colours.Gold, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
 
 	local clock = Material("mizmo-gaming-downloads/icons/clock32.png")
@@ -230,12 +228,15 @@ end
 function HUD.TimerIn()
 	HUD.TimerY = -36
 	HUD.RoundState = 1;
+    HUD.VictimNo = 0;
+    HUD.VictimI = 1;
+    HUD.VictimTable = {}
+    HUD.VictimName = nil;
 end
 
 function HUD.TimerOut()
-	HUD.TimerY = 0
-	HUD.RoundState = 2;
-	DeathFeed(LocalPlayer())
+    HUD.TimerY = 0
+    HUD.RoundState = 2;
 end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,32 +248,47 @@ HUD.VictimName = nil;
 isdead = 0;
 HUD.DeathAlpha = 0;
 HUD.DeathY = 0;
+HUD.VictimNo = 0;
+HUD.VictimI = 1;
+HUD.NewKill = true;
 
 function HUD.DrawDeathFeed()
-		draw.SimpleTextOutlined(HUD.VictimName, "TimerFont", ScrW()/2, (ScrH()/6) * 5 - HUD.DeathY, Color(200, 0, 0, HUD.DeathAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, HUD.DeathAlpha))
-		local skull = Material("mizmo-gaming-downloads/icons/skull32.png")
-		surface.SetMaterial(skull)
-		surface.SetDrawColor(Color(200, 0, 0, HUD.DeathAlpha))
-		local w, h = surface.GetTextSize(HUD.VictimName)
-		surface.DrawTexturedRect((ScrW()/2 - w/2) - 40, ((ScrH()/6) * 5 - h/2) - HUD.DeathY, 32, 32)
+    if HUD.VictimTable[HUD.VictimI] ~= nil then
+        if HUD.NewKill == true then
+            HUD.DeathAlpha = 255;
+            HUD.DeathY = 0;
+        end
+        HUD.NewKill = false;
+        draw.SimpleTextOutlined(HUD.VictimTable[HUD.VictimI], "TimerFont", ScrW()/2, (ScrH()/14) * 13 - HUD.DeathY, Color(200, 0, 0, HUD.DeathAlpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, HUD.DeathAlpha))
+        local skull = Material("mizmo-gaming-downloads/icons/skull32.png")
+        surface.SetMaterial(skull)
+        surface.SetDrawColor(Color(200, 0, 0, HUD.DeathAlpha))
+        local w, h = surface.GetTextSize(HUD.VictimTable[HUD.VictimI])
+        surface.DrawTexturedRect((ScrW()/2 - w/2) - 40, ((ScrH()/14) * 13 - h/2) - HUD.DeathY, 32, 32)
 
-		HUD.DeathY = HUD.DeathY + (1/2)
-		if HUD.DeathY >= 50 then
-			HUD.DeathAlpha = math.Clamp(HUD.DeathAlpha - (1/2), 0, 255)
-		end
-		if HUD.DeathAlpha <= 0 then
-			HUD.DeathAlpha = 0;
-			HUD.DeathY = 0;
-			isdead = 0;
-		end
+        HUD.DeathY = HUD.DeathY + (1/2)
+        if HUD.DeathY >= 50 then
+            HUD.DeathAlpha = math.Clamp(HUD.DeathAlpha - (1/2), 0, 255)
+        end
+        if HUD.DeathAlpha <= 0 then
+            HUD.DeathAlpha = 0;
+            HUD.DeathY = 0;
+            HUD.VictimI = HUD.VictimI + 1;
+            HUD.NewKill = true;
+        end
+    end
 end
 
-function DeathFeed(victim)
-	HUD.VictimName = victim:GetName()
-	HUD.DeathAlpha = 255;
-	HUD.DeathY = 0;
-	isdead = 1;
-end
+net.Receive("PlayerDied", function()
+    local ply = net.ReadEntity()
+    HUD.VictimName = ply:GetName()
+    HUD.VictimNo = HUD.VictimNo + 1;
+    HUD.VictimTable[HUD.VictimNo] = HUD.VictimName;
+end)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////Crosshair////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 hook.Add("DeathrunBeginPrep", "TimerIn", HUD.TimerIn)
 hook.Add("DeathrunBeginOver", "TimerOut", HUD.TimerOut)

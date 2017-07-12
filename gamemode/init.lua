@@ -111,6 +111,10 @@ include("DropWeapon/sv_dropweapon.lua");
 include("Mapvote/mapvote.lua");
 include("Mapvote/sv_mapvote.lua");
 
+include("Mapvote/sv_mapvote.lua");
+
+include("DeathSystem/sv_deathSystem.lua");
+
 util.AddNetworkString("DeathrunChatMessage")
 util.AddNetworkString("DeathrunSyncMutelist")
 util.AddNetworkString("DeathrunNotification")
